@@ -4,20 +4,18 @@
             {
                 "cmd":
                 [
-                        "/Users/nfaggian/anaconda/bin/py.test",
-                        "-vx",
-                        "$file"
+                        "/Users/nfaggian/anaconda/bin/python"
                 ],
                 "file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
-                "name": "gfe-py.test",
+                "name": "anaconda",
                 "selector": "source.python"
             }
         ],
 
-	"folders":
-	[
-		{
-			"path": "/Users/nfaggian/Desktop/python/growcut"
-		}
-	]
+    "folders":
+    [
+        {
+            "path": "/Users/nfaggian/Desktop/python/growcut"
+        }
+    ]
 }
