@@ -1,0 +1,23 @@
+{
+        "build_systems":
+        [
+            {
+                "cmd":
+                [
+                        "/Users/nfaggian/anaconda/bin/py.test",
+                        "-vx",
+                        "$file"
+                ],
+                "file_regex": "^[ ]*File \"(...*?)\", line ([0-9]*)",
+                "name": "gfe-py.test",
+                "selector": "source.python"
+            }
+        ],
+
+	"folders":
+	[
+		{
+			"path": "/Users/nfaggian/Desktop/python/growcut"
+		}
+	]
+}
