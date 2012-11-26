@@ -8,20 +8,53 @@ import numpy as np
 def test_neighbours():
     """ Assert the pattern of the neighbourhood is correct """
 
-    point = (10, 10)
-    pointIterator = automata.iterNeighbours(point)
+    point = (5, 5)
+    pointIterator = automata.iterNeighbours(point, (10, 10))
 
-    assert np.allclose(pointIterator.next(), (9, 10))
-    assert np.allclose(pointIterator.next(), (11, 10))
-    assert np.allclose(pointIterator.next(), (10, 11))
-    assert np.allclose(pointIterator.next(), (10, 9))
+    assert np.allclose(pointIterator.next(), (4, 5))
+    assert np.allclose(pointIterator.next(), (6, 5))
+    assert np.allclose(pointIterator.next(), (5, 6))
+    assert np.allclose(pointIterator.next(), (5, 4))
+
+
+def test_neighbours_origin():
+    """ Assert the pattern of the neighbourhood is correct """
+
+    point = (0, 0)
+    pointIterator = automata.iterNeighbours(point, (10, 10))
+
+    assert np.allclose(pointIterator.next(), (9, 0))
+    assert np.allclose(pointIterator.next(), (1, 0))
+    assert np.allclose(pointIterator.next(), (0, 1))
+    assert np.allclose(pointIterator.next(), (0, 9))
+
+
+def test_neighbours_right_boundary():
+
+    point = (0, 5)
+    pointIterator = automata.iterNeighbours(point, (10, 10))
+
+    assert np.allclose(pointIterator.next(), (9, 5))
+    assert np.allclose(pointIterator.next(), (1, 5))
+    assert np.allclose(pointIterator.next(), (0, 6))
+    assert np.allclose(pointIterator.next(), (0, 4))
+
+
+def test_neighbours_left_boundary():
+
+    point = (5, 0)
+    pointIterator = automata.iterNeighbours(point, (10, 10))
+
+    assert np.allclose(pointIterator.next(), (4, 0))
+    assert np.allclose(pointIterator.next(), (6, 0))
+    assert np.allclose(pointIterator.next(), (5, 1))
+    assert np.allclose(pointIterator.next(), (5, 9))
 
 
 def test_iterGrid():
     """ Assert the correct pattern of samples """
 
     rows, cols = np.mgrid[0:10, 0:10]
-
     automata.iterGrid(rows)
 
     assert False

@@ -5,10 +5,10 @@ import numpy as np
 NEIGHBOURS = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 
 
-def iterNeighbours((r, c), neighbours=NEIGHBOURS):
+def iterNeighbours((r, c), shape, neighbours=NEIGHBOURS):
     """ Yield the point neighborhood """
-    for (dx, dy) in neighbours:
-        yield r + dx, c + dy
+    for (dr, dc) in neighbours:
+        yield (r + dr) % shape[0], (c + dc) % shape[1]
 
 
 def iterGrid(grid):
