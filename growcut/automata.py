@@ -2,19 +2,20 @@
 
 import numpy as np
 
-NEIGHBOURS = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+CONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]
+CONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 
-def iterNeighbours((r, c), shape, neighbours=NEIGHBOURS):
+def iterNeighbours((r, c), shape, neighbours=CONNECT_4):
     """ Yield the point neighborhood """
     for (dr, dc) in neighbours:
         yield (r + dr) % shape[0], (c + dc) % shape[1]
 
 
-def iterGrid(grid):
+def iterGrid(grid, neighbours=CONNECT_4):
     """ Iterate through a grid """
     for point in np.ndindex(grid.shape):
-        values = [grid[x] for x in iterNeighbours(point, grid.shape)]
+        values = [grid[x] for x in iterNeighbours(point, grid.shape, neighbours)]
         yield point, values
 
 
@@ -23,7 +24,7 @@ def gameOfLife(state):
 
     nextState = np.zeros_like(state)
 
-    for point, values in iterGrid(state):
+    for point, values in iterGrid(state, neighbours=CONNECT_8):
 
         liveNeigbhours = sum(values)
 
