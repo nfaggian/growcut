@@ -29,17 +29,17 @@ def gameOfLife(state):
 
         # Any live cell with fewer than two live neighbors dies, as if
         # caused by under-population.
-        if liveNeigbhours < 2:
+        if state[point] and liveNeigbhours < 2:
             nextState[point] = 0
 
         # Any live cell with two or three live neighbors lives on to the
         # next generation.
-        if liveNeigbhours == 2 or liveNeigbhours == 3:
+        if state[point] and (liveNeigbhours == 2 or liveNeigbhours == 3):
             nextState[point] = 1
 
         # Any live cell with more than three live neighbors dies, as if by
         # overcrowding.
-        if liveNeigbhours > 3:
+        if state[point] and liveNeigbhours > 3:
             nextState[point] = 0
 
         # Any dead cell with exactly three live neighbors becomes a live cell,
