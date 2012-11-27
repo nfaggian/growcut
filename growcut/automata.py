@@ -44,7 +44,7 @@ def gameOfLife(state):
 
         # Any dead cell with exactly three live neighbors becomes a live cell,
         # as if by reproduction.
-        if not state[point] and liveNeigbhours > 3:
+        if not state[point] and liveNeigbhours == 3:
             nextState[point] = 1
 
     return nextState

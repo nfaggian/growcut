@@ -27,7 +27,7 @@ anim = animation.FuncAnimation(
     animate,
     init_func=init,
     frames=200,
-    interval=20,
+    interval=1,
     #blit=True
     )
 
