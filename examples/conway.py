@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from growcut import automata
 
@@ -6,7 +7,7 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 
-state = np.random.randint(0, 2, (100, 100)).astype(np.bool)
+state = np.random.randint(0, 2, (50, 50)).astype(np.bool)
 fig = plt.figure(figsize=(10, 10))
 img = plt.imshow(state, interpolation='nearest', origin='lower', cmap='binary')
 
@@ -17,7 +18,7 @@ def init():
 
 
 def animate(i):
-    state[:] = automata.gameOfLife(state)[:]
+    state[:] = automata.numpyGameOfLife(state)[:]
     img.set_data(state)
     return img,
 

@@ -1,10 +1,15 @@
-""" Python implementation of growcut """
+""" Python implementation of grow-cut """
 
 import numpy as np
+
+from scipy import ndimage as nd
+
 
 CONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 CONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
+
+# Slow neighborhood iterators.
 
 def iterNeighbours((r, c), shape, neighbours=CONNECT_4):
     """ Yield the point neighborhood """
@@ -18,6 +23,60 @@ def iterGrid(grid, neighbours=CONNECT_4):
         values = [grid[x] for x in iterNeighbours(point, grid.shape, neighbours)]
         yield point, values
 
+
+# Numpy/Scipy specific implementation.
+
+def formSamples(shape, neighbours=CONNECT_4):
+    """ Forms a matrix of row and sample coordinates """
+    sr = []
+    sc = []
+    r, c = np.mgrid[0:shape[0], 0:shape[1]]
+    for (dr, dc) in neighbours:
+        sr.append((r.flatten() + dr) % shape[0])
+        sc.append((c.flatten() + dc) % shape[1])
+
+    coordinates = np.array(sr).T, np.array(sc).T
+    return coordinates
+
+
+def sample(grid, coordinates):
+    """ Samples a grid at the specified coordinates """
+    return nd.map_coordinates(grid, coordinates, order=0)
+
+
+def numpyGameOfLife(state):
+    """ Conways game of life """
+
+    coordinates = formSamples(state.shape, neighbours=CONNECT_8)
+
+    neighboursStates = sample(state, coordinates).astype(np.bool)
+
+    alive = state.flatten() == 1
+
+    nextState = np.zeros_like(alive)
+
+    aliveNeighbours = neighboursStates.sum(axis=1)
+
+    # Any live cell with fewer than two live neighbors dies, as if
+    # caused by under-population.
+    nextState[alive & aliveNeighbours < 2] = 0
+
+    # Any live cell with two or three live neighbors lives on to the
+    # next generation.
+    nextState[alive & np.logical_or(aliveNeighbours == 2, aliveNeighbours == 3)] = 1
+
+    # Any live cell with more than three live neighbors dies, as if by
+    # overcrowding.
+    nextState[alive & aliveNeighbours > 3] = 0
+
+    # Any dead cell with exactly three live neighbors becomes a live cell,
+    # as if by reproduction.
+    nextState[~alive & aliveNeighbours == 3] = 1
+
+    return nextState.reshape(state.shape)
+
+
+# Game of life using generators.
 
 def gameOfLife(state):
     """ Conways game of life """
@@ -53,17 +112,3 @@ def gameOfLife(state):
             nextState[point] = 1
 
     return nextState
-
-
-# from scipy import ndimage
-# from scipy import misc
-
-# # Numpy approach.
-# def vonNeumannSampler(shape):
-#     sr = []
-#     sc = []
-#     for (r, c) in np.ndindex(shape):
-#         sr.append([r-1, r+1, r, r])
-#         sc.append([c, c, c+1, c-1])
-#     return np.array(sr), np.array(sc)
-

@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"CONE",
+				"CONNECT_8"
+			],
+			[
+				"ne",
+				"neighbours"
+			],
+			[
+				"CONNEC",
+				"CONNECT_4"
+			],
+			[
 				"net",
 				"nextState"
 			],
@@ -260,10 +272,6 @@
 				"neighbour"
 			],
 			[
-				"ne",
-				"neighbor"
-			],
-			[
 				"comp",
 				"computeMultiLine"
 			],
@@ -395,15 +403,18 @@
 			"file": "growcut/tests/test_automata.py",
 			"settings":
 			{
-				"buffer_size": 2023,
+				"buffer_size": 2123,
 				"line_ending": "Unix"
 			}
 		},
 		{
+			"contents": "\"\"\" Python implementation of growcut \"\"\"\n\nimport numpy as np\n\nCONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]\nCONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]\n\n\n# Slow neighborhood iterators.\n\ndef iterNeighbours((r, c), shape, neighbours=CONNECT_4):\n    \"\"\" Yield the point neighborhood \"\"\"\n    for (dr, dc) in neighbours:\n        yield (r + dr) % shape[0], (c + dc) % shape[1]\n\n\ndef iterGrid(grid, neighbours=CONNECT_4):\n    \"\"\" Iterate through a grid \"\"\"\n    for point in np.ndindex(grid.shape):\n        values = [grid[x] for x in iterNeighbours(point, grid.shape, neighbours)]\n        yield point, values\n\n\n# Fast numpy sampler.\n\n\n\n\n\n\n\ndef gameOfLife(state):\n    \"\"\" Conways game of life \"\"\"\n\n    nextState = np.zeros_like(state)\n\n    for point, values in iterGrid(state, neighbours=CONNECT_8):\n\n        liveNeigbhours = sum(values)\n\n        alive = True if state[point] else False\n\n        # Apply a set of rules.\n\n        # Any live cell with fewer than two live neighbors dies, as if\n        # caused by under-population.\n        if alive and liveNeigbhours < 2:\n            nextState[point] = 0\n\n        # Any live cell with two or three live neighbors lives on to the\n        # next generation.\n        if alive and (liveNeigbhours == 2 or liveNeigbhours == 3):\n            nextState[point] = 1\n\n        # Any live cell with more than three live neighbors dies, as if by\n        # overcrowding.\n        if alive and liveNeigbhours > 3:\n            nextState[point] = 0\n\n        # Any dead cell with exactly three live neighbors becomes a live cell,\n        # as if by reproduction.\n        if not alive and liveNeigbhours == 3:\n            nextState[point] = 1\n\n    return nextState\n\n\n# from scipy import ndimage\n# from scipy import misc\n\n# # Numpy approach.\n# def vonNeumannSampler(shape):\n#     sr = []\n#     sc = []\n#     for (r, c) in np.ndindex(shape):\n#         sr.append([r-1, r+1, r, r])\n#         sc.append([c, c, c+1, c-1])\n#     return np.array(sr), np.array(sc)\n\n",
 			"file": "growcut/automata.py",
+			"file_size": 1955,
+			"file_write_time": 1353992508000000,
 			"settings":
 			{
-				"buffer_size": 1818,
+				"buffer_size": 2016,
 				"line_ending": "Unix"
 			}
 		}
@@ -583,15 +594,15 @@
 					"file": "growcut/tests/test_automata.py",
 					"settings":
 					{
-						"buffer_size": 2023,
+						"buffer_size": 2123,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1765,
-								1765
+								937,
+								937
 							]
 						],
 						"settings":
@@ -689,7 +700,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 756.0,
+						"translation.y": 432.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -699,15 +710,15 @@
 					"file": "growcut/automata.py",
 					"settings":
 					{
-						"buffer_size": 1818,
+						"buffer_size": 2016,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								672,
-								672
+								666,
+								666
 							]
 						],
 						"settings":
@@ -805,7 +816,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 54.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -866,6 +877,10 @@
 		"height": 0.0,
 		"selected_items":
 		[
+			[
+				"test_",
+				"growcut/tests/test_automata.py"
+			],
 			[
 				"con",
 				"examples/conway.py"
