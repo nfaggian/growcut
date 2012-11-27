@@ -6,7 +6,7 @@ import numpy as np
 
 
 def test_neighbours():
-    """ Assert the pattern of the neighbourhood is correct """
+    """ Assert the pattern of the neighborhood is correct """
 
     point = (5, 5)
     pointIterator = automata.iterNeighbours(point, (10, 10))
@@ -18,7 +18,7 @@ def test_neighbours():
 
 
 def test_neighbours_origin():
-    """ Assert the pattern of the neighbourhood is correct """
+    """ Assert the pattern of the neighborhood is correct """
 
     point = (0, 0)
     pointIterator = automata.iterNeighbours(point, (10, 10))
@@ -54,7 +54,17 @@ def test_neighbours_left_boundary():
 def test_iterGrid():
     """ Assert the correct pattern of samples """
 
-    rows, cols = np.mgrid[0:10, 0:10]
-    automata.iterGrid(rows)
+    grid = np.array([[1, 2], [3, 4]])
+    gridIterator = automata.iterGrid(grid)
 
-    assert False
+    point, values = gridIterator.next()
+    assert np.allclose(values, [3, 3, 2, 2])
+
+    point, values = gridIterator.next()
+    assert np.allclose(values, [4, 4, 1, 1])
+
+    point, values = gridIterator.next()
+    assert np.allclose(values, [1, 1, 4, 4])
+
+    point, values = gridIterator.next()
+    assert np.allclose(values, [2, 2, 3, 3])

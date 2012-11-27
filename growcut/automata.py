@@ -14,8 +14,40 @@ def iterNeighbours((r, c), shape, neighbours=NEIGHBOURS):
 def iterGrid(grid):
     """ Iterate through a grid """
     for point in np.ndindex(grid.shape):
-        values = [grid[x] for x in iterNeighbours(point)]
-        print '{}: {}'.format(point, values)
+        values = [grid[x] for x in iterNeighbours(point, grid.shape)]
+        yield point, values
+
+
+def gameOfLife(state):
+    """ Conways game of life """
+
+    nextState = np.zeros_like(state)
+
+    for point, values in iterGrid(state):
+
+        liveNeigbhours = sum(values)
+
+        # Any live cell with fewer than two live neighbors dies, as if
+        # caused by under-population.
+        if liveNeigbhours < 2:
+            nextState[point] = 0
+
+        # Any live cell with two or three live neighbors lives on to the
+        # next generation.
+        if liveNeigbhours == 2 or liveNeigbhours == 3:
+            nextState[point] = 1
+
+        # Any live cell with more than three live neighbors dies, as if by
+        # overcrowding.
+        if liveNeigbhours > 3:
+            nextState[point] = 0
+
+        # Any dead cell with exactly three live neighbors becomes a live cell,
+        # as if by reproduction.
+        if not state[point] and liveNeigbhours > 3:
+            nextState[point] = 1
+
+    return nextState
 
 
 # from scipy import ndimage
