@@ -1,5 +1,4 @@
 import numpy as np
-import time
 
 from growcut import automata
 
@@ -29,7 +28,7 @@ anim = animation.FuncAnimation(
     init_func=init,
     frames=200,
     interval=1,
-    #blit=True
+    blit=True
     )
 
 plt.show()

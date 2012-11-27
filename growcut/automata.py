@@ -73,7 +73,7 @@ def numpyGameOfLife(state):
     # as if by reproduction.
     nextState[~alive & aliveNeighbours == 3] = 1
 
-    return nextState.reshape(state.shape)
+    return nextState.reshape(state.shape).T
 
 
 # Game of life using generators.
