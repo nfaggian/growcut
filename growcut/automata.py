@@ -27,24 +27,28 @@ def gameOfLife(state):
 
         liveNeigbhours = sum(values)
 
+        alive = True if state[point] else False
+
+        # Apply a set of rules.
+
         # Any live cell with fewer than two live neighbors dies, as if
         # caused by under-population.
-        if state[point] and liveNeigbhours < 2:
+        if alive and liveNeigbhours < 2:
             nextState[point] = 0
 
         # Any live cell with two or three live neighbors lives on to the
         # next generation.
-        if state[point] and (liveNeigbhours == 2 or liveNeigbhours == 3):
+        if alive and (liveNeigbhours == 2 or liveNeigbhours == 3):
             nextState[point] = 1
 
         # Any live cell with more than three live neighbors dies, as if by
         # overcrowding.
-        if state[point] and liveNeigbhours > 3:
+        if alive and liveNeigbhours > 3:
             nextState[point] = 0
 
         # Any dead cell with exactly three live neighbors becomes a live cell,
         # as if by reproduction.
-        if not state[point] and liveNeigbhours == 3:
+        if not alive and liveNeigbhours == 3:
             nextState[point] = 1
 
     return nextState

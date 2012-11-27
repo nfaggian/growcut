@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 
-state = np.random.randint(0, 2, (100, 100))
+state = np.random.randint(0, 2, (100, 100)).astype(np.bool)
 fig = plt.figure(figsize=(10, 10))
 img = plt.imshow(state, interpolation='nearest', origin='lower', cmap='binary')
 
