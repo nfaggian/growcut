@@ -44,9 +44,8 @@ def sample(grid, coordinates):
     return nd.map_coordinates(grid, coordinates, order=0)
 
 
-def numpyGameOfLife(state):
+def numpyGameOfLife(state, coordinates):
     """ Conways game of life """
-    coordinates = formSamples(state.shape, neighbours=CONNECT_8)
 
     neighboursStates = sample(state, coordinates)
 
