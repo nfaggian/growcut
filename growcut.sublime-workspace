@@ -4,12 +4,28 @@
 		"selected_items":
 		[
 			[
-				"CONE",
-				"CONNECT_8"
+				"iter",
+				"iteratorValues"
+			],
+			[
+				"gri",
+				"gridIterator"
+			],
+			[
+				"alive",
+				"aliveNeighbours"
 			],
 			[
 				"ne",
-				"neighbours"
+				"neighboursStates"
+			],
+			[
+				"CONN",
+				"CONNECT_8"
+			],
+			[
+				"CONE",
+				"CONNECT_8"
 			],
 			[
 				"CONNEC",
@@ -22,10 +38,6 @@
 			[
 				"live",
 				"liveNeigbhours"
-			],
-			[
-				"iter",
-				"iterGrid"
 			],
 			[
 				"obj",
@@ -202,10 +214,6 @@
 			[
 				"crea",
 				"createLabelLayer"
-			],
-			[
-				"gri",
-				"gridToLatLon  (function)"
 			],
 			[
 				"sub",
@@ -403,18 +411,23 @@
 			"file": "growcut/tests/test_automata.py",
 			"settings":
 			{
-				"buffer_size": 2123,
+				"buffer_size": 3030,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "\"\"\" Python implementation of growcut \"\"\"\n\nimport numpy as np\n\nCONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]\nCONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]\n\n\n# Slow neighborhood iterators.\n\ndef iterNeighbours((r, c), shape, neighbours=CONNECT_4):\n    \"\"\" Yield the point neighborhood \"\"\"\n    for (dr, dc) in neighbours:\n        yield (r + dr) % shape[0], (c + dc) % shape[1]\n\n\ndef iterGrid(grid, neighbours=CONNECT_4):\n    \"\"\" Iterate through a grid \"\"\"\n    for point in np.ndindex(grid.shape):\n        values = [grid[x] for x in iterNeighbours(point, grid.shape, neighbours)]\n        yield point, values\n\n\n# Fast numpy sampler.\n\n\n\n\n\n\n\ndef gameOfLife(state):\n    \"\"\" Conways game of life \"\"\"\n\n    nextState = np.zeros_like(state)\n\n    for point, values in iterGrid(state, neighbours=CONNECT_8):\n\n        liveNeigbhours = sum(values)\n\n        alive = True if state[point] else False\n\n        # Apply a set of rules.\n\n        # Any live cell with fewer than two live neighbors dies, as if\n        # caused by under-population.\n        if alive and liveNeigbhours < 2:\n            nextState[point] = 0\n\n        # Any live cell with two or three live neighbors lives on to the\n        # next generation.\n        if alive and (liveNeigbhours == 2 or liveNeigbhours == 3):\n            nextState[point] = 1\n\n        # Any live cell with more than three live neighbors dies, as if by\n        # overcrowding.\n        if alive and liveNeigbhours > 3:\n            nextState[point] = 0\n\n        # Any dead cell with exactly three live neighbors becomes a live cell,\n        # as if by reproduction.\n        if not alive and liveNeigbhours == 3:\n            nextState[point] = 1\n\n    return nextState\n\n\n# from scipy import ndimage\n# from scipy import misc\n\n# # Numpy approach.\n# def vonNeumannSampler(shape):\n#     sr = []\n#     sc = []\n#     for (r, c) in np.ndindex(shape):\n#         sr.append([r-1, r+1, r, r])\n#         sc.append([c, c, c+1, c-1])\n#     return np.array(sr), np.array(sc)\n\n",
 			"file": "growcut/automata.py",
-			"file_size": 1955,
-			"file_write_time": 1353992508000000,
 			"settings":
 			{
-				"buffer_size": 2016,
+				"buffer_size": 3315,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "examples/conway.py",
+			"settings":
+			{
+				"buffer_size": 708,
 				"line_ending": "Unix"
 			}
 		}
@@ -518,6 +531,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"liveNeigbhours",
+			"vector",
 			"automata.iterGrid(grid)",
 			"]",
 			"',",
@@ -586,7 +601,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -594,15 +609,15 @@
 					"file": "growcut/tests/test_automata.py",
 					"settings":
 					{
-						"buffer_size": 2123,
+						"buffer_size": 3030,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								937,
-								937
+								583,
+								583
 							]
 						],
 						"settings":
@@ -700,7 +715,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 432.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -710,15 +725,131 @@
 					"file": "growcut/automata.py",
 					"settings":
 					{
-						"buffer_size": 2016,
+						"buffer_size": 3315,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								666,
-								666
+								1843,
+								1843
+							]
+						],
+						"settings":
+						{
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": false,
+							"sublimelinter_mark_style": "outline",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1409.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "examples/conway.py",
+					"settings":
+					{
+						"buffer_size": 708,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								472,
+								472
 							]
 						],
 						"settings":

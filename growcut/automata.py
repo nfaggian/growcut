@@ -46,12 +46,11 @@ def sample(grid, coordinates):
 
 def numpyGameOfLife(state):
     """ Conways game of life """
-
     coordinates = formSamples(state.shape, neighbours=CONNECT_8)
 
-    neighboursStates = sample(state, coordinates).astype(np.bool)
+    neighboursStates = sample(state, coordinates)
 
-    alive = state.flatten() == 1
+    alive = state.flatten()
 
     nextState = np.zeros_like(alive)
 
@@ -59,21 +58,21 @@ def numpyGameOfLife(state):
 
     # Any live cell with fewer than two live neighbors dies, as if
     # caused by under-population.
-    nextState[alive & aliveNeighbours < 2] = 0
+    nextState[alive & (aliveNeighbours < 2)] = False
 
     # Any live cell with two or three live neighbors lives on to the
     # next generation.
-    nextState[alive & np.logical_or(aliveNeighbours == 2, aliveNeighbours == 3)] = 1
+    nextState[alive & np.logical_or(aliveNeighbours == 2, aliveNeighbours == 3)] = True
 
     # Any live cell with more than three live neighbors dies, as if by
     # overcrowding.
-    nextState[alive & aliveNeighbours > 3] = 0
+    nextState[alive & (aliveNeighbours > 3)] = True
 
     # Any dead cell with exactly three live neighbors becomes a live cell,
     # as if by reproduction.
-    nextState[~alive & aliveNeighbours == 3] = 1
+    nextState[(~alive) & (aliveNeighbours == 3)] = True
 
-    return nextState.reshape(state.shape).T
+    return nextState.reshape(state.shape)
 
 
 # Game of life using generators.
@@ -85,7 +84,7 @@ def gameOfLife(state):
 
     for point, values in iterGrid(state, neighbours=CONNECT_8):
 
-        liveNeigbhours = sum(values)
+        aliveNeigbhours = sum(values)
 
         alive = True if state[point] else False
 
@@ -93,22 +92,22 @@ def gameOfLife(state):
 
         # Any live cell with fewer than two live neighbors dies, as if
         # caused by under-population.
-        if alive and liveNeigbhours < 2:
+        if alive and aliveNeigbhours < 2:
             nextState[point] = 0
 
         # Any live cell with two or three live neighbors lives on to the
         # next generation.
-        if alive and (liveNeigbhours == 2 or liveNeigbhours == 3):
+        if alive and (aliveNeigbhours == 2 or aliveNeigbhours == 3):
             nextState[point] = 1
 
         # Any live cell with more than three live neighbors dies, as if by
         # overcrowding.
-        if alive and liveNeigbhours > 3:
+        if alive and aliveNeigbhours > 3:
             nextState[point] = 0
 
         # Any dead cell with exactly three live neighbors becomes a live cell,
         # as if by reproduction.
-        if not alive and liveNeigbhours == 3:
+        if not alive and aliveNeigbhours == 3:
             nextState[point] = 1
 
     return nextState

@@ -68,3 +68,34 @@ def test_iterGrid():
 
     point, values = gridIterator.next()
     assert np.allclose(values, [2, 2, 3, 3])
+
+
+def test_formSamples():
+    """
+    Assert that the correct pattern of samples is generated using both
+    the fast and slow sampling methods.
+    """
+
+    grid, _ = np.mgrid[0:100, 0:100]
+
+    gridIterator = automata.iterGrid(grid, automata.CONNECT_4)
+
+    # Slow approach
+    iteratorValues = []
+    for _, values in gridIterator:
+        iteratorValues.append(values)
+    iteratorValues = np.array(iteratorValues)
+
+    # Fast approach
+    coordinates = automata.formSamples(grid.shape, automata.CONNECT_4)
+    sampledValues = automata.sample(grid, coordinates)
+
+    # Assert equivalence of approaches
+    assert np.allclose(sampledValues, iteratorValues)
+
+
+def test_flatten():
+    """ Tests the flattening behavior of numpy"""
+    # So : x.flatten() can be inverted using x.reshape(old_shape)
+    grid = np.array([[1, 2, 4], [5, 6, 7]])
+    assert np.allclose(grid.flatten().reshape(grid.shape), grid)

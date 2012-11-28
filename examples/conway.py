@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 from growcut import automata
 
@@ -19,6 +20,7 @@ def init():
 def animate(i):
     state[:] = automata.numpyGameOfLife(state)[:]
     img.set_data(state)
+    time.sleep(0.2)
     return img,
 
 # call the animator.  blit=True means only re-draw the parts that have changed.
