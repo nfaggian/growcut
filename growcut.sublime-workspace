@@ -419,7 +419,7 @@
 			"file": "growcut/automata.py",
 			"settings":
 			{
-				"buffer_size": 3315,
+				"buffer_size": 3334,
 				"line_ending": "Unix"
 			}
 		},
@@ -601,7 +601,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -725,15 +725,15 @@
 					"file": "growcut/automata.py",
 					"settings":
 					{
-						"buffer_size": 3315,
+						"buffer_size": 3334,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1843,
-								1843
+								0,
+								0
 							]
 						],
 						"settings":
@@ -831,7 +831,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1409.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

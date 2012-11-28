@@ -9,7 +9,7 @@ CONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 CONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
 
-# Slow neighborhood iterators.
+# Slow neighborhood generator functions.
 
 def iterNeighbours((r, c), shape, neighbours=CONNECT_4):
     """ Yield the point neighborhood """
@@ -24,7 +24,7 @@ def iterGrid(grid, neighbours=CONNECT_4):
         yield point, values
 
 
-# Numpy/Scipy specific implementation.
+# Fast equivalent numpy/scipy functions.
 
 def formSamples(shape, neighbours=CONNECT_4):
     """ Forms a matrix of row and sample coordinates """
@@ -75,7 +75,7 @@ def numpyGameOfLife(state):
     return nextState.reshape(state.shape)
 
 
-# Game of life using generators.
+# Game of life using python generators.
 
 def gameOfLife(state):
     """ Conways game of life """
