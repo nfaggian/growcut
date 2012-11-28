@@ -24,6 +24,17 @@ def iterGrid(grid, neighbours=CONNECT_4):
         yield point, values
 
 
+def iterGrids(grids, neighbours=CONNECT_4):
+    """ Iterate through a list of grids (of the same shape) """
+    for point in np.ndindex(grids[0].shape):
+        values = []
+        for grid in grids:
+            values.append(
+                [grid[x] for x in iterNeighbours(point, grid.shape, neighbours)
+                ])
+        yield point, values
+
+
 # Fast equivalent numpy/scipy functions.
 
 def formSamples(shape, neighbours=CONNECT_4):
