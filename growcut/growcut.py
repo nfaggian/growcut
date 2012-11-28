@@ -1,9 +1,4 @@
-""" Implementation of the grow cut algorithm
-
-V. Vezhnevets, V. Konouchine (2005).
-    "Grow-Cut" - Interactive Multi-Label N-D Image Segmentation".
-        Proc. Graphicon. pp. 150–156.
-"""
+""" Implementation of the grow-cut algorithm """
 
 import numpy as np
 
@@ -24,10 +19,22 @@ def norm(x):
 def automate(lum, strength, label):
     """ Grow-cut """
 
-    nextLabel = np.zeros_like(label)
+    nextLabel = label.copy()
+    nextStrength = strength.copy()
 
-    for point, (lumValues, strengthValues, labelValues) in iterGrid(state, neighbours=CONNECT_8):
-      pass
+    for point, (neighbourLum, neighbourStrength, neigbourLabel) in automata.iterGrids(
+        (lum, strength, label), neighbours=automata.CONNECT_8
+        ):
 
-    return nextLabel
+        cp = lum[point]
+        thetap = strength[point]
 
+        C = np.array(neighbourLum)
+
+        for cq, thetaq, lq in zip(neighbourLum, neighbourStrength, neigbourLabel):
+
+            if g(norm(cp - cq), C) * thetaq > thetap:
+                nextLabel[point] = lq
+                nextStrength[point] = g(norm(cp - cq), C) * thetaq
+
+    return nextStrength, nextLabel

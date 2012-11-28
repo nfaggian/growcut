@@ -70,6 +70,30 @@ def test_iterGrid():
     assert np.allclose(values, [2, 2, 3, 3])
 
 
+def test_iterGrids():
+    """ Assert the correct pattern of samples """
+
+    grid1 = np.array([[1, 2], [3, 4]])
+    grid2 = np.array([[5, 6], [7, 8]])
+    gridsIterator = automata.iterGrids([grid1, grid2], automata.CONNECT_4)
+
+    point, values = gridsIterator.next()
+    assert np.allclose(values[0], [3, 3, 2, 2])
+    assert np.allclose(values[1], [7, 7, 6, 6])
+
+    point, values = gridsIterator.next()
+    assert np.allclose(values[0], [4, 4, 1, 1])
+    assert np.allclose(values[1], [8, 8, 5, 5])
+
+    point, values = gridsIterator.next()
+    assert np.allclose(values[0], [1, 1, 4, 4])
+    assert np.allclose(values[1], [5, 5, 8, 8])
+
+    point, values = gridsIterator.next()
+    assert np.allclose(values[0], [2, 2, 3, 3])
+    assert np.allclose(values[1], [6, 6, 7, 7])
+
+
 def test_formSamples():
     """
     Assert that the correct pattern of samples is generated using both
