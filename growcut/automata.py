@@ -66,7 +66,7 @@ def numpyGameOfLife(state):
 
     # Any live cell with more than three live neighbors dies, as if by
     # overcrowding.
-    nextState[alive & (aliveNeighbours > 3)] = True
+    nextState[alive & (aliveNeighbours > 3)] = False
 
     # Any dead cell with exactly three live neighbors becomes a live cell,
     # as if by reproduction.
