@@ -5,9 +5,9 @@ import numpy as np
 import automata
 
 
-def g(x, C):
+def g(x, maxC):
     """ Damping function """
-    return 1. - (float(x) / float(max(C)))
+    return 1. - (float(x) / maxC)
 
 
 def norm(x):
@@ -23,18 +23,16 @@ def automate(lum, strength, label):
     nextStrength = strength.copy()
 
     for point, (neighbourLum, neighbourStrength, neigbourLabel) in automata.iterGrids(
-        (lum, strength, label), neighbours=automata.CONNECT_8
+        (lum, strength, label), neighbours=automata.CONNECT_4
         ):
 
         cp = lum[point]
         thetap = strength[point]
 
-        C = np.array(neighbourLum)
-
         for cq, thetaq, lq in zip(neighbourLum, neighbourStrength, neigbourLabel):
 
-            if g(norm(cp - cq), C) * thetaq > thetap:
+            if g(norm(cp - cq), lum.max()) * thetaq > thetap:
                 nextLabel[point] = lq
-                nextStrength[point] = g(norm(cp - cq), C) * thetaq
+                nextStrength[point] = g(norm(cp - cq), lum.max()) * thetaq
 
     return nextStrength, nextLabel

@@ -12,13 +12,20 @@ lum = np.average(image, 2)
 
 # Form a label grid (0: no label, 1: foreground, 2: background)
 label = np.zeros_like(lum, dtype=np.int)
+label[:] = -1
 label[75:90, 100:110] = 1
-label[0:10, 0:10] = 2
+label[0:10, 0:10] = 0
+label[75:90, 0:10] = 0
+label[0:10, 200:210] = 0
+label[75:90, 200:210] = 0
 
 # Form a strength grid.
 strength = np.zeros_like(lum, dtype=np.float64)
-strength[75:90, 100:110] = 1.0
-strength[0:10, 0:10] = 1.0
+label[75:90, 100:110] = 1.0
+label[0:10, 0:10] = 1.0
+label[75:90, 0:10] = 1.0
+label[0:10, 200:210] = 1.0
+label[75:90, 200:210] = 1.0
 
 
 # Plot the image and the label map.
@@ -29,7 +36,7 @@ ax2.imshow(label, interpolation='nearest', cmap='binary')
 ax2.axis('off')
 
 # Automate to update the labels
-for i in range(200):
+for i in range(10):
     strength, label = growcut.automate(lum, strength, label)
 
 
