@@ -2,14 +2,11 @@
 
 import numpy as np
 
-from scipy import ndimage as nd
-
-
 CONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 CONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
 
-
 # Slow neighborhood generator functions.
+
 
 def iterNeighbours((r, c), shape, neighbours=CONNECT_4):
     """ Yield the point neighborhood """
@@ -50,7 +47,8 @@ def formSamples(shape, neighbours=CONNECT_4):
     return coordinates
 
 
-# If we needed to make a sampler, we would just use this:
+# If we needed to make a sampler, we could use this:
+# from scipy import ndimage as nd
 # def sample(grid, coordinates):
 #     """ Samples a grid at the specified coordinates """
 #     return nd.map_coordinates(grid, coordinates, order=0)
