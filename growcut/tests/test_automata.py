@@ -112,7 +112,7 @@ def test_formSamples():
 
     # Fast approach
     coordinates = automata.formSamples(grid.shape, automata.CONNECT_4)
-    sampledValues = automata.sample(grid, coordinates)
+    sampledValues = grid[coordinates]
 
     # Assert equivalence of approaches
     assert np.allclose(sampledValues, iteratorValues)
