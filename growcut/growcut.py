@@ -2,9 +2,11 @@
 
 import numpy as np
 
-np.set_printoptions(threshold=100000)
+np.set_printoptions(threshold=100000, precision=3)
 
 import automata
+
+#import ipdb
 
 
 def g(x, maxC):
@@ -18,32 +20,32 @@ def norm(x):
     return np.linalg.norm(x)
 
 
-def numpyAutomate(lum, strength, label):
+def numpyAutomate(coordinates, lum, strength, label):
     """ Numpy based grow-cut """
 
     nextLabel = label.copy().flatten()
     nextStrength = strength.copy().flatten()
-    coordinates = automata.formSamples(lum.shape, neighbours=automata.CONNECT_4)
 
     CP = lum.flatten()
     THETAP = strength.flatten()
 
-    CQ = automata.sample(lum, coordinates)
-    THETAQ = automata.sample(strength, coordinates)
-    LQ = automata.sample(label, coordinates)
+    CQ = lum[coordinates]
+    THETAQ = strength[coordinates]
+    LQ = label[coordinates]
 
-    CPminusCQ = np.vstack([CP] * CQ.shape[1]).T - CQ
+    CPminusCQ = np.abs(np.vstack([CP] * CQ.shape[1]).T - CQ)
 
     attackStrength = g(CPminusCQ, lum.max()) * THETAQ
     defendStrength = np.vstack([THETAP] * CQ.shape[1]).T
 
-    c = np.argmax(attackStrength > defendStrength, axis=1)
-    r = np.arange(0, attackStrength.shape[0])
-    mask = np.alltrue(~(attackStrength > defendStrength), axis=1)
+    growthMask = attackStrength > defendStrength
+    cols = np.argmax(growthMask, axis=1)
+    rows = np.arange(0, attackStrength.shape[0])
+    mask = np.any(growthMask, axis=1)
 
     # Fill the new strengths
-    nextLabel[mask] = LQ[r[mask], c[mask]]
-    nextStrength[mask] = attackStrength[r[mask], c[mask]]
+    nextLabel[mask] = LQ[rows[mask], cols[mask]]
+    nextStrength[mask] = attackStrength[rows[mask], cols[mask]]
 
     return nextStrength.reshape(strength.shape), nextLabel.reshape(label.shape)
 

@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from growcut import growcut
+from growcut import growcut, automata
 
 
 def test_g():
@@ -66,9 +66,9 @@ def test_norm():
 
 def test_numpy_automate():
 
-    shape = (10, 10)
+    shape = (100, 100)
     cx, cy = shape[1] / 2.0, shape[0] / 2.0
-    r = 5
+    r = 20
 
     y, x = np.ogrid[0:shape[0], 0:shape[1]]
     mask = (np.power((y - cy), 2) + np.power((x - cx), 2)) < np.power(r, 2)
@@ -93,9 +93,11 @@ def test_numpy_automate():
     ax2.imshow(label, interpolation='nearest', cmap='jet')
     ax2.axis('off')
 
+    coordinates = automata.formSamples(field.shape, neighbours=automata.CONNECT_8)
+
     # Automate to update the labels
     for itteration in range(20):
-        theta, label = growcut.numpyAutomate(field, theta, label)
+        theta, label = growcut.numpyAutomate(coordinates, field, theta, label)
 
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
     ax1.imshow(field, interpolation='nearest', cmap='gray')

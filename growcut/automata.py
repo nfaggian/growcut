@@ -50,15 +50,16 @@ def formSamples(shape, neighbours=CONNECT_4):
     return coordinates
 
 
-def sample(grid, coordinates):
-    """ Samples a grid at the specified coordinates """
-    return nd.map_coordinates(grid, coordinates, order=0)
+# If we needed to make a sampler, we would just use this:
+# def sample(grid, coordinates):
+#     """ Samples a grid at the specified coordinates """
+#     return nd.map_coordinates(grid, coordinates, order=0)
 
 
 def numpyGameOfLife(state, coordinates):
     """ Conways game of life """
 
-    neighboursStates = sample(state, coordinates)
+    neighboursStates = state[coordinates]
 
     alive = state.flatten()
 
