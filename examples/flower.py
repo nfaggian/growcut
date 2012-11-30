@@ -26,7 +26,8 @@ label[75:90, 200:210] = 0
 
 # Form a strength grid.
 strength = np.zeros_like(lum, dtype=np.float64)
-strength[label != -1] = 1.
+strength[label != -1] = 1.0
+
 
 coordinates = automata.formSamples(lum.shape, neighbours=automata.CONNECT_4)
 
