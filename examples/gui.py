@@ -82,7 +82,7 @@ class GrowCutWidget(QtGui.QWidget):
              )
 
         # Itterating?
-        self.paused = False
+        self.paused = True
         self.editLabel = 1
 
         self.resize(640, 480)
@@ -92,6 +92,7 @@ class GrowCutWidget(QtGui.QWidget):
         # Place a visualization of the image.
         self.imageScene = QtGui.QGraphicsScene(self)
         self.imageView = GrowCutImageView(self.imageScene)
+        self.imageView.fitInView(QtCore.QRectF(0, 0, image.shape[1], image.shape[0]), QtCore.Qt.KeepAspectRatio)
         self.layout.addWidget(self.imageView)
 
         self.displayedImage = QtGui.QGraphicsPixmapItem()
@@ -105,6 +106,8 @@ class GrowCutWidget(QtGui.QWidget):
         # Place a visualization of the label.
         self.labelScene = QtGui.QGraphicsScene(self)
         self.labelView = GrowCutImageView(self.labelScene)
+        self.labelView.fitInView(QtCore.QRectF(0, 0, image.shape[1], image.shape[0]), QtCore.Qt.KeepAspectRatio)
+
         self.layout.addWidget(self.labelView)
 
         self.displayedLabel = QtGui.QGraphicsPixmapItem()
@@ -122,7 +125,6 @@ class GrowCutWidget(QtGui.QWidget):
         # Form a timer for growcut automations
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.timedUpdate)
-        self.timer.start(50)
 
     def labelUpdate(self, x, y):
         """
@@ -198,37 +200,47 @@ class Example(QtGui.QMainWindow):
         strength = np.zeros_like(lum, dtype=np.float64)
         strength[label > 0] = 1.
 
-        widget = GrowCutWidget(lum, label, strength)
+        self.widget = GrowCutWidget(lum, label, strength)
 
-        self.setCentralWidget(widget)
+        self.setCentralWidget(self.widget)
 
-        pauseAction = QtGui.QAction(QtGui.QIcon('examples/pause.png'), 'Pause', self)
-        pauseAction.setShortcut('Ctrl+P')
-        pauseAction.setStatusTip('Pause application')
+        self.segmentAction = QtGui.QAction(QtGui.QIcon('examples/play.png'), 'Pause', self)
+        self.segmentAction.setShortcut('Ctrl+P')
+        self.segmentAction.setStatusTip('Start/Stop segmentation')
 
-        foregroundAction = QtGui.QAction(QtGui.QIcon('examples/pen.png'), 'Fill foreground', self)
-        foregroundAction.setShortcut('Ctrl+F')
-        foregroundAction.setStatusTip('Fill foreground pixels')
+        self.foregroundAction = QtGui.QAction(QtGui.QIcon('examples/pen.png'), 'Fill foreground', self)
+        self.foregroundAction.setShortcut('Ctrl+F')
+        self.foregroundAction.setStatusTip('Fill foreground pixels')
 
-        backgroundAction = QtGui.QAction(QtGui.QIcon('examples/pen_alt.png'), 'Fill background', self)
-        backgroundAction.setShortcut('Ctrl+F')
-        backgroundAction.setStatusTip('Fill background pixels')
+        self.backgroundAction = QtGui.QAction(QtGui.QIcon('examples/pen_alt.png'), 'Fill background', self)
+        self.backgroundAction.setShortcut('Ctrl+F')
+        self.backgroundAction.setStatusTip('Fill background pixels')
 
-        pauseAction.triggered.connect(widget.pause)
-        foregroundAction.triggered.connect(widget.editForeground)
-        backgroundAction.triggered.connect(widget.editBackground)
+        self.segmentAction.triggered.connect(self.widget.pause)
+        self.segmentAction.triggered.connect(self.toggleSegmentActionIcon)
+
+        self.foregroundAction.triggered.connect(self.widget.editForeground)
+        self.backgroundAction.triggered.connect(self.widget.editBackground)
+
+        self.backgroundAction.setCheckable(False)
 
         self.statusBar()
 
         toolbar = self.addToolBar('Toolbar')
-        toolbar.addAction(pauseAction)
-        toolbar.addAction(foregroundAction)
-        toolbar.addAction(backgroundAction)
+        toolbar.addAction(self.segmentAction)
+        toolbar.addSeparator()
+        toolbar.addAction(self.foregroundAction)
+        toolbar.addAction(self.backgroundAction)
 
         self.setGeometry(300, 300, 350, 250)
         self.setWindowTitle('GrowCut Segmentation')
         self.show()
 
+    def toggleSegmentActionIcon(self, event):
+        if self.widget.paused:
+            self.segmentAction.setIcon(QtGui.QIcon('examples/play.png'))
+        else:
+            self.segmentAction.setIcon(QtGui.QIcon('examples/pause.png'))
 
 def main():
 
