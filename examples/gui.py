@@ -119,12 +119,35 @@ class GrowCutWidget(QtGui.QWidget):
             )
 
         self.labelView.mouseDragEvent.connect(self.labelUpdate)
-
+        self.imageView.mouseDragEvent.connect(self.labelUpdate)
         # self.labelView.wheelEvent.connect(self.wheelEvent)
 
         # Form a timer for growcut automations
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.timedUpdate)
+
+    def imageUpdate(self, fname):
+
+        lum = plt.imread(fname)
+
+        self.image = np.average(lum, 2)
+        self.label = np.zeros_like(self.image, dtype=np.int)
+        self.strength = np.zeros_like(self.image, dtype=np.float64)
+
+        self.displayedImage.setPixmap(
+            QtGui.QPixmap.fromImage(ndarrayToQtImage(self.image))
+            )
+        self.imageView.centerOn(self.displayedImage)
+
+        self.displayedLabel.setPixmap(
+            QtGui.QPixmap.fromImage(ndarrayToQtImage(self.label))
+            )
+        self.labelView.centerOn(self.displayedLabel)
+
+        self.coordinates = automata.formSamples(
+             self.image.shape,
+             neighbours=automata.CONNECT_4
+             )
 
     def labelUpdate(self, x, y):
         """
@@ -176,6 +199,7 @@ class Example(QtGui.QMainWindow):
 
         self.initUI()
 
+
     def initUI(self):
 
         # Glue in the grow-cut widget
@@ -204,6 +228,11 @@ class Example(QtGui.QMainWindow):
 
         self.setCentralWidget(self.widget)
 
+        self.openFile = QtGui.QAction(QtGui.QIcon('examples/open.png'), 'Open', self)
+        self.openFile.setShortcut('Ctrl+O')
+        self.openFile.setStatusTip('Open new File')
+        self.openFile.triggered.connect(self.showDialog)
+
         self.segmentAction = QtGui.QAction(QtGui.QIcon('examples/play.png'), 'Pause', self)
         self.segmentAction.setShortcut('Ctrl+P')
         self.segmentAction.setStatusTip('Start/Stop segmentation')
@@ -227,6 +256,8 @@ class Example(QtGui.QMainWindow):
         self.statusBar()
 
         toolbar = self.addToolBar('Toolbar')
+        toolbar.addAction(self.openFile)
+        toolbar.addSeparator()
         toolbar.addAction(self.segmentAction)
         toolbar.addSeparator()
         toolbar.addAction(self.foregroundAction)
@@ -241,6 +272,17 @@ class Example(QtGui.QMainWindow):
             self.segmentAction.setIcon(QtGui.QIcon('examples/play.png'))
         else:
             self.segmentAction.setIcon(QtGui.QIcon('examples/pause.png'))
+
+    def showDialog(self):
+
+        self.fname = QtGui.QFileDialog.getOpenFileName(
+            self,
+            'Open file',
+            '/home'
+            )
+
+        self.widget.imageUpdate(str(self.fname))
+
 
 def main():
 
