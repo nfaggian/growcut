@@ -1,4 +1,3 @@
-
 import sys
 import math
 import numpy as np
@@ -7,8 +6,11 @@ import matplotlib.pyplot as plt
 from growcut import automata, growcut
 from PyQt4 import QtCore, QtGui
 
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
 
-def ndarrayToQtImage(array):
+
+def ndarrayToQtImage(array, normalize=True):
     r"""Converts a numpy array to a Qt Qimage.
 
     Parameters
@@ -23,15 +25,16 @@ def ndarrayToQtImage(array):
             nd-array.
     """
 
-    # Map to 0-255 colorspace.
-    array = np.array(
-        np.interp(
-            array,
-            [array.min(), array.max()],
-            [0, 255]
-            ),
-        dtype=np.uint8
-        )
+    if normalize:
+        # Map to 0-255 colorspace.
+        array = np.array(
+            np.interp(
+                array,
+                [array.min(), array.max()],
+                [0, 255]
+                ),
+            dtype=np.uint8
+            )
 
     h, w = array.shape
 
@@ -46,7 +49,9 @@ def ndarrayToQtImage(array):
 
     # Update the color table, which is associated with the luminance image.
     for i in xrange(256):
-        qimage.setColor(i, QtGui.QColor(i, i, i).rgb())
+        c = QtGui.QColor(i, i, i)
+        # c.setAlpha(alpha)
+        qimage.setColor(i, c.rgb())
     return qimage
 
 
@@ -96,11 +101,12 @@ class GrowCutWidget(QtGui.QWidget):
         self.layout.addWidget(self.imageView)
 
         self.displayedImage = QtGui.QGraphicsPixmapItem()
+
         self.imageScene.addItem(self.displayedImage)
         self.imageView.centerOn(self.displayedImage)
 
         self.displayedImage.setPixmap(
-            QtGui.QPixmap.fromImage(ndarrayToQtImage(image))
+            QtGui.QPixmap.fromImage(ndarrayToQtImage(self.image))
             )
 
         # Place a visualization of the label.
@@ -125,6 +131,9 @@ class GrowCutWidget(QtGui.QWidget):
         # Form a timer for growcut automations
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.timedUpdate)
+
+        self.redPen = QtGui.QPen(QtGui.QColor(*RED))
+        self.greenPen = QtGui.QPen(QtGui.QColor(*GREEN))
 
     def imageUpdate(self, fname):
 
@@ -153,12 +162,15 @@ class GrowCutWidget(QtGui.QWidget):
         """
         Update the label/strength map based on user input
         """
+        pen = self.greenPen if self.editLabel == 1 else self.redPen
 
         if (((y > 0) & (y < self.image.shape[0])) &
             ((x > 0) & (x < self.image.shape[1]))):
 
             self.label[y, x] = self.editLabel
             self.strength[y, x] = 1.0
+            self.imageScene.addRect(x, y, 1, 1, pen)
+
 
     def pause(self):
 
@@ -188,7 +200,7 @@ class GrowCutWidget(QtGui.QWidget):
             )
 
         self.displayedLabel.setPixmap(
-            QtGui.QPixmap.fromImage(ndarrayToQtImage(self.label * self.image))
+            QtGui.QPixmap.fromImage(ndarrayToQtImage((self.label == 1) * self.image))
             )
 
 
@@ -198,7 +210,6 @@ class Example(QtGui.QMainWindow):
         super(Example, self).__init__()
 
         self.initUI()
-
 
     def initUI(self):
 
@@ -210,19 +221,10 @@ class Example(QtGui.QMainWindow):
 
         # Form a label grid (0: no label, 1: foreground, 2: background)
         label = np.zeros_like(lum, dtype=np.int)
-        label[:] = 0
-        label[75:90, 100:110] = 1
-        label[110:120, 150:160] = 1
-        label[50:55, 160:165] = 1
-        label[50:55, 180:185] = 2
-        label[0:10, 0:10] = 2
-        label[75:90, 0:10] = 2
-        label[0:10, 200:210] = 2
-        label[75:90, 200:210] = 2
 
         # Form a strength grid.
         strength = np.zeros_like(lum, dtype=np.float64)
-        strength[label > 0] = 1.
+        # strength[label > 0] = 1.
 
         self.widget = GrowCutWidget(lum, label, strength)
 
@@ -288,6 +290,7 @@ def main():
 
     app = QtGui.QApplication(sys.argv)
     ex = Example()
+    ex.resize(1200, 500)
     sys.exit(app.exec_())
 
 
