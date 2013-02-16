@@ -6,9 +6,11 @@ Python implementation of the growcut algorithm.
 Testing
 -------
 
-[![Build Status](https://travis-ci.org/python-growcut/python.png?branch=master)](https://travis-ci.org/pyimreg/imreg)
+[![Build Status](https://travis-ci.org/nfaggian/python-growcut.png?branch=master)](https://travis-ci.org/nfaggian/python-growcut)
 
 
+Examples
+--------
 
 Getting started (after cloning):
 
