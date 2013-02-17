@@ -3,7 +3,7 @@ Grow-Cut Image Segmentation
 
 The "growcut" package implements celular automata based segmentation algorithm.
 
-This package uses `semantic versioning <http://semver.org/>`.
+![Example of growcut](http://upload.wikimedia.org/wikipedia/en/5/54/GrowCut_Algorithm_Demo.gif, "Example of growcut")
 
 References:
 -----------
