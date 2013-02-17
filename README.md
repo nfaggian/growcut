@@ -67,6 +67,6 @@ Requires PyQt4:
 Development
 -----------
 
-Follow: Fork + Pull Model::
+Follow: Fork + Pull Model:
 
     http://help.github.com/send-pull-requests/
