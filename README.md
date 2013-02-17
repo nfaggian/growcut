@@ -1,7 +1,7 @@
-Image Registration (imreg)
+Grow-Cut Image Segmentation
 ==========================
 
-The "growcut" package implements celular automata based segmentatio algorithm.
+The "growcut" package implements celular automata based segmentation algorithm.
 
 This package uses `semantic versioning <http://semver.org/>`.
 
