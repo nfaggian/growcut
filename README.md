@@ -50,7 +50,7 @@ Examples
 
 Getting started (after cloning):
 
-    cd python-growcut
+    cd growcut
     
     export PYTHONPATH=`pwd`
 
