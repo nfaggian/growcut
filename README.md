@@ -21,7 +21,7 @@ Maintainers
 Testing
 -------
 
-[![Build Status](https://travis-ci.org/nfaggian/python-growcut.png?branch=master)](https://travis-ci.org/nfaggian/python-growcut)
+[![Build Status](https://travis-ci.org/nfaggian/growcut.png?branch=master)](https://travis-ci.org/nfaggian/growcut)
 
 Dependencies
 ------------
