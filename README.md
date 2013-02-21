@@ -1,7 +1,7 @@
 Grow-Cut Image Segmentation
 ==========================
 
-The "growcut" package implements celular automata based segmentation algorithm.
+The "growcut" package implements cellular automata based segmentation algorithm.
 
 References:
 -----------
@@ -61,4 +61,4 @@ Development
 
 Follow: Fork + Pull Model:
 
-    http://help.github.com/send-pull-requests/
+    https://help.github.com/articles/using-pull-requests
