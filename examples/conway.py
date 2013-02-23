@@ -13,7 +13,6 @@ fig = plt.figure(figsize=(10, 10))
 img = plt.imshow(state, interpolation='nearest', origin='lower', cmap='binary')
 plt.axis('off')
 
-
 def init():
     img.set_data(state)
     return img,
@@ -22,7 +21,7 @@ def init():
 def animate(i):
     state[:] = automata.numpyGameOfLife(state, coordinates)[:]
     img.set_data(state)
-    return img,
+    return img
 
 # call the animator.  blit=True means only re-draw the parts that have changed.
 anim = animation.FuncAnimation(
@@ -31,7 +30,7 @@ anim = animation.FuncAnimation(
     init_func=init,
     frames=200,
     interval=1,
-    blit=True
+    blit=False
     )
 
 plt.show()
