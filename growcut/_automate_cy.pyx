@@ -7,9 +7,6 @@ import sys
 import numpy as np
 cimport numpy as cnp
 
-import automata
-import growcut
-
 CONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]
 CONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1),
              (0, 1), (1, -1), (1, 0), (1, 1)]
@@ -30,48 +27,6 @@ def _pad(arr):
 
 
 def automate_cy(cnp.ndarray[double, ndim=2] lum,
-                cnp.ndarray[double, ndim=2] strength,
-                cnp.ndarray[int, ndim=2] label):
-    """ Grow-cut """
-
-    # Output initialization
-    cdef cnp.ndarray[double, ndim=2] nextStrength = (
-                strength.copy().astype(float))
-    cdef cnp.ndarray[int, ndim=2] nextLabel = (
-                label.copy().astype(int))
-
-    # Internal variables
-    cdef:
-        tuple point
-        list neighbourLum
-        list neighbourStrength
-        list neighbourLabel
-        float cp
-        float thetap
-        float cq
-        float thetaq
-        int lq
-        float lum_max
-
-    lum_max = lum.max()
-
-    for point, (neighbourLum, neighbourStrength, neighbourLabel) in automata.iterGrids((lum, strength, label), neighbours=automata.CONNECT_4):
-
-        cp = lum[point]
-        thetap = strength[point]
-
-        for cq, thetaq, lq in zip(neighbourLum,
-                                  neighbourStrength,
-                                  neighbourLabel):
-
-            if _g_cy(np.abs(cp - cq), lum_max) * thetaq > thetap:
-                nextLabel[point] = lq
-                nextStrength[point] = _g_cy(np.abs(cp - cq), lum_max) * thetaq
-
-    return nextStrength, nextLabel
-
-
-def automate_cy2(cnp.ndarray[double, ndim=2] lum,
                 cnp.ndarray[double, ndim=2] strength,
                 cnp.ndarray[int, ndim=2] label,
                 connectivity=4):

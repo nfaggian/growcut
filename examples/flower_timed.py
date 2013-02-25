@@ -1,9 +1,13 @@
-""" Example of grow-cut segmentation """
+""" Example of grow-cut segmentation, should be run from package root """
 
 import numpy as np
 
 from growcut import automata, growcut
-from growcut._automate_cy import automate_cy, automate_cy2
+
+import pyximport
+pyximport.install(setup_args={"include_dirs": np.get_include()},
+                  reload_support=True)
+from growcut._automate_cy import automate_cy
 
 from matplotlib import pyplot as plt
 import time
@@ -34,16 +38,13 @@ coordinates = automata.formSamples(lum.shape, neighbours=automata.CONNECT_4)
 strength, label = growcut.numpyAutomate(coordinates, lum, strength, label)
 print "Numpy vectorized: " + str(100 * (time.time() - t0)) + " ms"
 
-# t0 = time.time()
-# strength, label = growcut.automate(lum, strength, label)
-# print "Pure Python: " + str(100 * (time.time() - t0)) + " ms"
-
 t0 = time.time()
 strength, label = automate_cy(lum.astype(float),
                               strength.astype(float),
-                              label.astype(int))
-print "Cython 1: " + str(100 * (time.time() - t0)) + " ms"
+                              label.astype(int),
+                              4)
+print "Cython: " + str(100 * (time.time() - t0)) + " ms"
 
 t0 = time.time()
-strength, label = automate_cy2(lum.astype(float), strength.astype(float), label.astype(int), 4)
-print "Cython 2: " + str(100 * (time.time() - t0)) + " ms"
+strength, label = growcut.automate(lum, strength, label)
+print "Pure Python: " + str(100 * (time.time() - t0)) + " ms"
