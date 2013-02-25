@@ -14,7 +14,7 @@ import time
 
 # Load an image of a particular type
 image = plt.imread('./examples/flower.png')
-lum = np.average(image, 2)
+lum = np.average(image, 2).astype(np.float64)
 
 # Form a label grid (0: no label, 1: foreground, 2: background)
 label = np.zeros_like(lum, dtype=np.int)
@@ -39,10 +39,7 @@ strength, label = growcut.numpyAutomate(coordinates, lum, strength, label)
 print "Numpy vectorized: " + str(100 * (time.time() - t0)) + " ms"
 
 t0 = time.time()
-strength, label = automate_cy(lum.astype(float),
-                              strength.astype(float),
-                              label.astype(int),
-                              4)
+strength, label = automate_cy(lum, strength, label, connectivity=4)
 print "Cython: " + str(100 * (time.time() - t0)) + " ms"
 
 t0 = time.time()
