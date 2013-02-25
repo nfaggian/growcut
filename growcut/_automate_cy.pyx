@@ -50,7 +50,6 @@ def automate_cy(cnp.ndarray[double, ndim=2] lum,
     # Set max luminance & connectivity
     lum_max = lum.max()
 
-
     # Pad inputs with one pixel of replication, so wraparound isn't a concern
     lum = _pad(lum)
     strength = _pad(strength)
