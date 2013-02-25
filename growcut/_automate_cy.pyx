@@ -7,9 +7,9 @@ import sys
 import numpy as np
 cimport numpy as cnp
 
-CONNECT_4 = [(-1, 0), (1, 0), (0, 1), (0, -1)]
-CONNECT_8 = [(-1, -1), (-1, 0), (-1, 1), (0, -1),
-             (0, 1), (1, -1), (1, 0), (1, 1)]
+cdef tuple CONNECT_4 = ((-1, 0), (1, 0), (0, 1), (0, -1))
+cdef tuple CONNECT_8 = ((-1, -1), (-1, 0), (-1, 1), (0, -1),
+                        (0, 1), (1, -1), (1, 0), (1, 1))
 
 if sys.version_info < (3,):
     range = xrange
@@ -22,9 +22,9 @@ def _pad(arr):
                       arr[:, arr.shape[1] - 1][:, np.newaxis]))
 
 
-def automate_cy(cnp.ndarray[double, ndim=2] lum,
-                cnp.ndarray[double, ndim=2] strength,
-                cnp.ndarray[int, ndim=2] label,
+def automate_cy(cnp.ndarray[cnp.float64_t, ndim=2] lum,
+                cnp.ndarray[cnp.float64_t, ndim=2] strength,
+                cnp.ndarray[cnp.int_t, ndim=2] label,
                 connectivity=4):
     """ Grow-cut with Cython """
     if connectivity == 4:
@@ -33,21 +33,21 @@ def automate_cy(cnp.ndarray[double, ndim=2] lum,
         connectivity = CONNECT_8
 
     # Output initialization
-    cdef cnp.ndarray[double, ndim=2] nextStrength = (
-                np.atleast_2d(strength.copy()).astype(float))
-    cdef cnp.ndarray[int, ndim=2] nextLabel = (
-                np.atleast_2d(label.copy()).astype(int))
+    cdef cnp.ndarray[cnp.float64_t, ndim=2] nextStrength = (
+                np.atleast_2d(strength.copy()))
+    cdef cnp.ndarray[cnp.int_t, ndim=2] nextLabel = (
+                np.atleast_2d(label.copy()))
 
     # Internal variables
     cdef:
         tuple rel_point
-        float cp, thetap, cq, thetaq, lum_max
+        float cp, thetap, cq, thetaq, lum_max, test
         int lq
         Py_ssize_t rows = lum.shape[0]
         Py_ssize_t cols = lum.shape[1]
         Py_ssize_t rel_row, rel_col
 
-    # Set max luminance & connectivity
+    # Set max luminance
     lum_max = lum.max()
 
     # Pad inputs with one pixel of replication, so wraparound isn't a concern
