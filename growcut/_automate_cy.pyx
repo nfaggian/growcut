@@ -15,10 +15,6 @@ if sys.version_info < (3,):
     range = xrange
 
 
-def _g_cy(float x, float maxC):
-    return 1 - x / maxC
-
-
 def _pad(arr):
     arr = np.vstack((arr[0, :], arr, arr[arr.shape[0] - 1, :]))
     return np.hstack((arr[:, 0][:, np.newaxis],
@@ -30,7 +26,7 @@ def automate_cy(cnp.ndarray[double, ndim=2] lum,
                 cnp.ndarray[double, ndim=2] strength,
                 cnp.ndarray[int, ndim=2] label,
                 connectivity=4):
-    """ Grow-cut without iterGrids """
+    """ Grow-cut with Cython """
     if connectivity == 4:
         connectivity = CONNECT_4
     else:
@@ -44,8 +40,7 @@ def automate_cy(cnp.ndarray[double, ndim=2] lum,
 
     # Internal variables
     cdef:
-        tuple point, rel_point
-        list neighbourLum, neighbourStrength, neighbourLabel
+        tuple rel_point
         float cp, thetap, cq, thetaq, lum_max
         int lq
         Py_ssize_t rows = lum.shape[0]
@@ -74,7 +69,7 @@ def automate_cy(cnp.ndarray[double, ndim=2] lum,
                 cq = lum[rel_row, rel_col]
                 thetaq = strength[rel_row, rel_col]
                 lq = label[rel_row, rel_col]
-                test = _g_cy(abs(cp - cq), lum_max) * thetaq
+                test = (1 - (abs(cp - cq) / lum_max)) * thetaq
 
                 if test > thetap:
                     nextLabel[row, col] = lq
