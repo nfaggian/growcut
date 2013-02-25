@@ -74,9 +74,9 @@ def automate_cy(cnp.ndarray[double, ndim=2] lum,
                 cq = lum[rel_row, rel_col]
                 thetaq = strength[rel_row, rel_col]
                 lq = label[rel_row, rel_col]
-                test = _g_cy(cp - cq, lum_max) * thetaq
+                test = _g_cy(abs(cp - cq), lum_max) * thetaq
 
-                if test > thetap or test < -thetap:
+                if test > thetap:
                     nextLabel[row, col] = lq
                     nextStrength[row, col] = test
 
