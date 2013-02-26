@@ -57,8 +57,8 @@ def automate_cy(cnp.ndarray[cnp.float64_t, ndim=2] lum,
 
     # Loop over every point
     for row in range(rows):
+        offset_row = row + 1
         for col in range(cols):
-            offset_row = row + 1
             offset_col = col + 1
             cp = lum[offset_row, offset_col]
             thetap = strength[offset_row, offset_col]
