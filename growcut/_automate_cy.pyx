@@ -45,7 +45,7 @@ def automate_cy(cnp.ndarray[cnp.float64_t, ndim=2] lum,
         int lq
         Py_ssize_t rows = lum.shape[0]
         Py_ssize_t cols = lum.shape[1]
-        Py_ssize_t rel_row, rel_col
+        Py_ssize_t rel_row, rel_col, offset_row, offset_col
 
     # Set max luminance
     lum_max = lum.max()
@@ -58,8 +58,10 @@ def automate_cy(cnp.ndarray[cnp.float64_t, ndim=2] lum,
     # Loop over every point
     for row in range(rows):
         for col in range(cols):
-            cp = lum[row + 1, col + 1]
-            thetap = strength[row + 1, col + 1]
+            offset_row = row + 1
+            offset_col = col + 1
+            cp = lum[offset_row, offset_col]
+            thetap = strength[offset_row, offset_col]
 
             # Loop over local neighborhood
             for rel_point in connectivity:
