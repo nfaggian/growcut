@@ -57,16 +57,16 @@ def automate_cy(cnp.ndarray[cnp.float64_t, ndim=2] lum,
 
     # Loop over every point
     for row in range(rows):
+        offset_row = row + 1
         for col in range(cols):
-            offset_row = row + 1
             offset_col = col + 1
             cp = lum[offset_row, offset_col]
             thetap = strength[offset_row, offset_col]
 
             # Loop over local neighborhood
             for rel_point in connectivity:
-                rel_row = row + rel_point[0] + 1
-                rel_col = col + rel_point[1] + 1
+                rel_row = offset_row + rel_point[0]
+                rel_col = offset_col + rel_point[1]
                 cq = lum[rel_row, rel_col]
                 thetaq = strength[rel_row, rel_col]
                 lq = label[rel_row, rel_col]
