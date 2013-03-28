@@ -6,15 +6,20 @@ The "growcut" package implements cellular automata based segmentation algorithm.
 References:
 -----------
 
-    V. Vezhnevets, V. Konouchine. "Grow-Cut" - Interactive Multi-Label N-D Image Segmentation". 
+    V. Vezhnevets, V. Konouchine. "Grow-Cut" - Interactive Multi-Label N-D Image Segmentation".
     In Proceedings of the 2005 Conference, Graphicon. Pages 150 – 156.
 
 
 Maintainers
 -----------
 
-   - Nathan Faggian
-   - Ed Schofield
+    - Nathan Faggian
+    - Ed Schofield
+
+Contributors
+------------
+    - Josh Warner (cython)
+    - Stefan Van Der Walt (cython, algorithm)
 
 Testing
 -------
@@ -49,7 +54,7 @@ Examples
 Requires Matplotlib:
 
     python examples/conway.py
-    
+
     python examples/flower.py
 
 Requires PyQt4:

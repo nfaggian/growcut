@@ -49,8 +49,6 @@ def growcut(image, state, max_iter=500, window_size=5):
         changes = 0
         n += 1
 
-        print n
-
         for j in range(width):
             for i in range(height):
                 C_p = image[i, j]
