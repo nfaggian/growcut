@@ -57,7 +57,7 @@ def test_growcut_cython_equality(shape):
         window_size=3)
 
     segmentation_fast = growcut_cy.growcut(
-        np.dstack((image, image, image)),
+        np.array([image, image, image]),
         np.dstack((label, strength)),
         window_size=3)
 
