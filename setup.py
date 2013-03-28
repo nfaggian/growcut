@@ -13,8 +13,8 @@ setup(
     packages=['growcut'],
     cmdclass={'build_ext': build_ext},
     ext_modules=[
-        Extension("growcut.growcut_cy", ["growcut/_growcut_cy.pyx"]),
-        Extension("growcut.automate_cy", ["growcut/_automate_cy.pyx"])],
+        Extension("growcut.growcut_cy", ["growcut/_growcut_cy.pyx"])
+        ],
     include_dirs=[numpy.get_include(), ],
     install_requires=[
         'matplotlib',
