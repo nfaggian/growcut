@@ -51,15 +51,12 @@ To install for all users on Unix/Linux:
 Examples
 --------
 
-Requires Matplotlib:
+Requires ipython:
 
-    python examples/conway.py
+    export PYTHONPATH=`pwd`
 
-    python examples/flower.py
+    ipython notebook --pylab=inline --notebook-dir=`pwd`/notebooks/'
 
-Requires PyQt4:
-
-    python examples/gui.py
 
 Development
 -----------
