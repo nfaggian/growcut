@@ -7,10 +7,13 @@ from growcut import automata, growcut
 from matplotlib import pyplot as plt
 from matplotlib import animation
 
+import pyximport
+pyximport.install(setup_args={"include_dirs": np.get_include()}, reload_support=True)
+from growcut._automate_cy import automate_cy
 
 # Load an image of a particular type
 image = plt.imread('./examples/flower.png')
-lum = np.average(image, 2)
+lum = np.average(image, 2).astype(np.float64)
 
 # Form a label grid (0: no label, 1: foreground, 2: background)
 label = np.zeros_like(lum, dtype=np.int)
@@ -29,7 +32,7 @@ strength = np.zeros_like(lum, dtype=np.float64)
 strength[label != -1] = 1.0
 
 
-coordinates = automata.formSamples(lum.shape, neighbours=automata.CONNECT_4)
+#coordinates = automata.formSamples(lum.shape, neighbours=automata.CONNECT_4)
 
 # Plot the image and the label map.
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
@@ -47,8 +50,8 @@ def init():
 
 
 def animate(i):
-    strength[:], label[:] = growcut.numpyAutomate(coordinates, lum, strength, label)
-
+#    strength[:], label[:] = growcut.numpyAutomate(coordinates, lum, strength, label)
+    strength[:], label[:] = automate_cy(lum, strength, label, connectivity=8)
     img.set_data((label == 1) * lum)
     return img,
 
