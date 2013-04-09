@@ -45,21 +45,21 @@ def test_growcut(shape):
     assert np.allclose(mask, segmentation == 1), "Segmentation did not converge"
 
 
-@pytest.mark.parametrize(("shape"), [(10, 10), (20, 20), (40, 40)])
-def test_growcut_cython_equality(shape):
-    """ Test correct segmentations using growcut """
-
-    image, mask, label, strength = sample_data(shape)
-
-    segmentation_slow = growcut.growcut(
-        image,
-        np.dstack((label, strength)),
-        window_size=3)
-
-    segmentation_fast = growcut_cy.growcut(
-        np.array([image, image, image]),
-        np.dstack((label, strength)),
-        window_size=3)
-
-    assert np.allclose(segmentation_slow, segmentation_fast), \
-        "Optimized segmentation is not equivalent to slow version."
+#@pytest.mark.parametrize(("shape"), [(10, 10), (20, 20), (40, 40)])
+#def test_growcut_cython_equality(shape):
+#    """ Test correct segmentations using growcut """
+#
+#    image, mask, label, strength = sample_data(shape)
+#
+#    segmentation_slow = growcut.growcut(
+#        image,
+#        np.dstack((label, strength)),
+#        window_size=3)
+#
+#    segmentation_fast = growcut_cy.growcut(
+#        np.array([image, image, image]),
+#        np.dstack((label, strength)),
+#        window_size=3)
+#
+#    assert np.allclose(segmentation_slow, segmentation_fast), \
+#        "Optimized segmentation is not equivalent to slow version."
