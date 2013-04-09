@@ -1,72 +1,76 @@
 """ Implementation of the grow-cut algorithm """
 
+from __future__ import division
+
 import numpy as np
 
-np.set_printoptions(threshold=100000, precision=3)
-
-import automata
-
-#import ipdb
+from skimage import img_as_float
+from math import sqrt
 
 
-def g(x, maxC):
-    """ Damping function """
-    return 1. - ((x * 1.) / maxC)
+def g(x, y):
+    return 1 - np.sqrt(np.sum((x - y) ** 2)) / sqrt(3)
 
 
-def norm(x):
-    """ L2 norm """
-    #return np.sqrt(np.sum(np.power(x, 2)))
-    return np.linalg.norm(x)
+def growcut(image, state, max_iter=500, window_size=5):
+    """Grow-cut segmentation.
 
+    Parameters
+    ----------
+    image : (M, N) ndarray
+        Input image.
+    state : (M, N, 2) ndarray
+        Initial state, which stores (foreground/background, strength) for
+        each pixel position or automaton.  The strength represents the
+        certainty of the state (e.g., 1 is a hard seed value that remains
+        constant throughout segmentation).
+    max_iter : int, optional
+        The maximum number of automata iterations to allow.  The segmentation
+        may complete earlier if the state no longer varies.
+    window_size : int
+        Size of the neighborhood window.
 
-def numpyAutomate(coordinates, lum, strength, label):
-    """ Numpy based grow-cut """
+    Returns
+    -------
+    mask : ndarray
+        Segmented image.  A value of zero indicates background, one foreground.
 
-    nextLabel = label.copy().flatten()
-    nextStrength = strength.copy().flatten()
+    """
+    image = img_as_float(image)
+    height, width = image.shape[:2]
+    ws = (window_size - 1) // 2
 
-    CP = lum.flatten()
-    THETAP = strength.flatten()
+    changes = 1
+    n = 0
 
-    CQ = lum[coordinates]
-    THETAQ = strength[coordinates]
-    LQ = label[coordinates]
+    state_next = state.copy()
 
-    CPminusCQ = np.abs(np.vstack([CP] * CQ.shape[1]).T - CQ)
+    while changes > 0 and n < max_iter:
+        changes = 0
+        n += 1
 
-    attackStrength = g(CPminusCQ, lum.max()) * THETAQ
-    defendStrength = np.vstack([THETAP] * CQ.shape[1]).T
+        for j in range(width):
+            for i in range(height):
+                C_p = image[i, j]
+                S_p = state[i, j]
 
-    growthMask = attackStrength > defendStrength
-    cols = np.argmax(growthMask, axis=1)
-    rows = np.arange(0, attackStrength.shape[0])
-    mask = np.any(growthMask, axis=1)
+                for jj in xrange(max(0, j - ws), min(j + ws + 1, width)):
+                    for ii in xrange(max(0, i - ws), min(i + ws + 1, height)):
+                        # p -> current cell
+                        # q -> attacker
+                        C_q = image[ii, jj]
+                        S_q = state[ii, jj]
 
-    # Fill the new strengths
-    nextLabel[mask] = LQ[rows[mask], cols[mask]]
-    nextStrength[mask] = attackStrength[rows[mask], cols[mask]]
+                        gc = g(C_q, C_p)
 
-    return nextStrength.reshape(strength.shape), nextLabel.reshape(label.shape)
+                        if gc * S_q[1] > S_p[1]:
+                            state_next[i, j, 0] = S_q[0]
+                            state_next[i, j, 1] = gc * S_q[1]
 
+                            changes += 1
+                            break
 
-def automate(lum, strength, label):
-    """ Grow-cut """
+        state = state_next
 
-    nextLabel = label.copy()
-    nextStrength = strength.copy()
+    return state[:, :, 0]
 
-    for point, (neighbourLum, neighbourStrength, neigbourLabel) in automata.iterGrids(
-        (lum, strength, label), neighbours=automata.CONNECT_4
-        ):
-
-        cp = lum[point]
-        thetap = strength[point]
-
-        for cq, thetaq, lq in zip(neighbourLum, neighbourStrength, neigbourLabel):
-
-            if g(norm(cp - cq), lum.max()) * thetaq > thetap:
-                nextLabel[point] = lq
-                nextStrength[point] = g(norm(cp - cq), lum.max()) * thetaq
-
-    return nextStrength, nextLabel
