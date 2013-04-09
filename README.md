@@ -34,6 +34,8 @@ The required dependencies to build the software are:
   - python
   - numpy
   - scipy
+  - cython
+  - scikit-image
   - py.test
 
 Install
