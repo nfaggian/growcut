@@ -21,6 +21,7 @@ install:
     - sudo pip-$PYVER install scikit-image
     - sudo pip-$PYVER install pytest
     - sudo apt-get install libfreeimage3
+    - sudo $PYTHON setup.py build_ext  
     - sudo $PYTHON setup.py install
 
 script:
