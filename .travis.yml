@@ -17,6 +17,7 @@ install:
     - sudo apt-get install $PYTHON-scipy
     - sudo apt-get install $PYTHON-setuptools
     - sudo pip-$PYVER install pytest
+    - sudo pip-$PYVER install cython	
     - sudo apt-get install libfreeimage3
     - sudo $PYTHON setup.py install
 
