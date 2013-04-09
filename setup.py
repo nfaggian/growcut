@@ -18,6 +18,6 @@ setup(
     include_dirs=[numpy.get_include(), ],
     install_requires=[
         'matplotlib',
-	'skimage',
+	'scikit-image',
 	'cython',
         'numpy'])
