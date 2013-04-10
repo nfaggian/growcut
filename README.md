@@ -53,6 +53,11 @@ To install for all users on Unix/Linux:
 Examples
 --------
 
+Ipython nbviewer:
+
+    http://nbviewer.ipython.org/urls/raw.github.com/nfaggian/growcut/master/notebooks/GrowCut%2520-%2520demonstration.ipynb
+
+
 Requires ipython:
 
     export PYTHONPATH=`pwd`
