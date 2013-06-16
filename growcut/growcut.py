@@ -1,7 +1,5 @@
 """ Implementation of the grow-cut algorithm """
 
-from __future__ import division
-
 import numpy as np
 
 from skimage import img_as_float

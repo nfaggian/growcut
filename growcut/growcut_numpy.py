@@ -1,4 +1,4 @@
-""" Implementation of the grow-cut algorithm """
+:""" Implementation of the grow-cut algorithm (numpy version) """
 
 from __future__ import division
 
@@ -8,10 +8,6 @@ from skimage import img_as_float
 from math import sqrt
 
 import logging
-
-
-def g(x, y):
-    return 1 - np.sqrt(np.sum((x - y) ** 2)) / sqrt(3)
 
 
 def G(x, y):
@@ -85,4 +81,3 @@ def growcut(image, state, max_iter=100, window_size=5):
         state = state_next
 
     return state[0]
-
