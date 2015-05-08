@@ -14,7 +14,6 @@ Maintainers
 -----------
 
     - Nathan Faggian
-    - Ed Schofield
 
 Contributors
 ------------
